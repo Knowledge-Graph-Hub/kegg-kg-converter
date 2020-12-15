@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from parameterized import parameterized
 
-from project_name.transform_utils.pharmgkb import PharmGKB
+from kg_converter.transform_utils.pharmgkb import PharmGKB
 
 
 class TestPharmGKB(TestCase):

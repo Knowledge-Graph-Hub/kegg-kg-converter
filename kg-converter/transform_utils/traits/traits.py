@@ -4,11 +4,11 @@ import os
 from typing import Dict, List, Optional
 from collections import defaultdict
 
-from project_name.transform_utils.transform import Transform
-from project_name.utils.transform_utils import parse_header, parse_line, write_node_edge_item
+from kg_converter.transform_utils.transform import Transform
+from kg_converter.utils.transform_utils import parse_header, parse_line, write_node_edge_item
 from kg_microbe.utils import biohub_converter as bc
-from project_name.utils.nlp_utils import *
-from project_name.utils.robot_utils import *
+from kg_converter.utils.nlp_utils import *
+from kg_converter.utils.robot_utils import *
 
 from kgx.cli.cli_utils import transform
 """

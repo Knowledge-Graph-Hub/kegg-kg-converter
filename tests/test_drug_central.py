@@ -2,10 +2,10 @@ import os
 import tempfile
 import unittest
 import pandas as pd
-from project_name.transform_utils.drug_central import DrugCentralTransform
-from project_name.transform_utils.drug_central.drug_central import \
+from kg_converter.transform_utils.drug_central import DrugCentralTransform
+from kg_converter.transform_utils.drug_central.drug_central import \
     parse_drug_central_line
-from project_name.utils.transform_utils import parse_header
+from kg_converter.utils.transform_utils import parse_header
 from parameterized import parameterized
 
 

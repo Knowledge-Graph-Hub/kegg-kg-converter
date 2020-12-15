@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from project_name.transform_utils.sars_cov_2_gene_annot.sars_cov_2_gene_annot import \
+from kg_converter.transform_utils.sars_cov_2_gene_annot.sars_cov_2_gene_annot import \
     _gpi12iterator
 
 
