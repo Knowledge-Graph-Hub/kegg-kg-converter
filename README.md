@@ -37,6 +37,4 @@ The [merge.yaml](merge.yaml) shows merging of the various KGs. In this example w
 
 **Setup**
 
-`python setup.py install`
-And
-`python -m pip install -r requirements.txt`
+`python setup.py install` and `python -m pip install -r requirements.txt`
