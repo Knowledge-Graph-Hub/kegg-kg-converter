@@ -40,9 +40,9 @@ extras = {
 }
 
 setup(
-    name='kg_converter',
+    name='kg-converter',
     version=__version__,
-    description='KG hub for kg_converter',
+    description='KG hub for kg-converter',
     long_description=long_description,
     url='https://github.com/Knowledge-Graph-Hub/kg-converter',
     author='Harshad Hegde',
@@ -64,7 +64,7 @@ setup(
         'tqdm',
         'wget',
         'compress_json',
-        'click',
+        'click==7.0',
         'pyyaml',
         'kgx'
     ],
