@@ -34,3 +34,7 @@ The [merge.yaml](merge.yaml) shows merging of the various KGs. In this example w
 **Implementation**
 
 [Use this template](https://github.com/Knowledge-Graph-Hub/kg-dtm-template/generate) to generate a template in the desired repository and then refactor the string `kg_converter` in the project to the desired project name. 
+
+**Setup**
+
+`python setup.py install` and `python -m pip install -r requirements.txt`
