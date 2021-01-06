@@ -13,10 +13,11 @@ DATA_SOURCES = {
     'DrugCentralTransform': DrugCentralTransform,
     #'GoTransform': OntologyTransform,
     #'HpTransform': OntologyTransform,
-    'NCBITransform': OntologyTransform,
+    #'NCBITransform': OntologyTransform,
     'ChebiTransform': OntologyTransform,
-    'EnvoTransform' : OntologyTransform,
-    'TraitsTransform': TraitsTransform
+    'KEGGTransform': KEGGTransform,
+    #'EnvoTransform' : OntologyTransform,
+    #'TraitsTransform': TraitsTransform
 }
 
 
