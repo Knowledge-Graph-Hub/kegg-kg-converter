@@ -12,13 +12,14 @@ kg_converter.egg-info/requires.txt
 kg_converter.egg-info/top_level.txt
 kg_converter/transform_utils/__init__.py
 kg_converter/transform_utils/transform.py
-kg_converter/transform_utils/drug_central/__init__.py
-kg_converter/transform_utils/drug_central/drug_central.py
+kg_converter/transform_utils/kegg/__init__.py
+kg_converter/transform_utils/kegg/kegg.py
 kg_converter/transform_utils/ontology/__init__.py
 kg_converter/transform_utils/ontology/ontology_transform.py
 kg_converter/transform_utils/traits/__init__.py
 kg_converter/transform_utils/traits/traits.py
 kg_converter/utils/__init__.py
+kg_converter/utils/biohub_converter.py
 kg_converter/utils/download_utils.py
 kg_converter/utils/nlp_utils.py
 kg_converter/utils/robot_utils.py

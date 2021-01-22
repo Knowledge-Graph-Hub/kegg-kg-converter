@@ -43,6 +43,10 @@ Description: Download-Transform-Merge Template
         
         [Use this template](https://github.com/Knowledge-Graph-Hub/kg-dtm-template/generate) to generate a template in the desired repository and then refactor the string `kg_converter` in the project to the desired project name. 
         
+        **Setup**
+        
+        `python setup.py install` and `python -m pip install -r requirements.txt`
+        
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Beta
 Classifier: License :: OSI Approved :: BSD License

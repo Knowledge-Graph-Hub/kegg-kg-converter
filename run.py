@@ -26,13 +26,11 @@ def download(*args, **kwargs) -> None:
     """Downloads data files from list of URLs (default: download.yaml) into data
     directory (default: data/raw).
 
-    Args:
-        yaml_file: Specify the YAML file containing a list of datasets to download.
-        output_dir: A string pointing to the directory to download data to.
-        ignore_cache: If specified, will ignore existing files and download again.
+    :param yaml_file: Specify the YAML file containing a list of datasets to download.
+    :param output_dir: A string pointing to the directory to download data to.
+    :param ignore_cache: If specified, will ignore existing files and download again.
 
-    Returns:
-        None.
+    :return: None.
 
     """
 
@@ -50,13 +48,11 @@ def transform(*args, **kwargs) -> None:
     """Calls scripts in kg_converter/transform/[source name]/ to transform each source
     into nodes and edges.
 
-    Args:
-        input_dir: A string pointing to the directory to import data from.
-        output_dir: A string pointing to the directory to output data to.
-        sources: A list of sources to transform.
+    :param input_dir: A string pointing to the directory to import data from.
+    :param output_dir: A string pointing to the directory to output data to.
+    :param sources: A list of sources to transform.
 
-    Returns:
-        None.
+    :Returns:None.
 
     """
 
