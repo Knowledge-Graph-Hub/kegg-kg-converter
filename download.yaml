@@ -48,6 +48,18 @@
   url: http://rest.kegg.jp/link/pathway/cpd
   local_name: compoundPathwayLink.tsv
 -
+  # GET: Pathway
+  url: http://rest.kegg.jp/get/pathway
+  local_name: kegg-pathways.tsv
+-
+  # GET: Reactions
+  url: http://rest.kegg.jp/get/rn
+  local_name: kegg-reactions.tsv
+-
+  # GET: Compounds
+  url: http://rest.kegg.jp/get/cpd
+  local_name: kegg-compunds.tsv
+-
   # CONV: Compound -> CHEBI
   url: http://rest.kegg.jp/conv/chebi/cpd
   local_name: compoundChebiConv.tsv

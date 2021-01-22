@@ -7,7 +7,7 @@ from kg_converter import download as kg_download
 from kg_converter import transform as kg_transform
 #from kg_converter.make_holdouts import make_holdouts
 from kg_converter.merge_utils.merge_kg import load_and_merge
-from kg_converter.query import run_query, parse_query_yaml, result_dict_to_tsv
+#from kg_converter.query import run_query, parse_query_yaml, result_dict_to_tsv
 from kg_converter.transform import DATA_SOURCES
 
 

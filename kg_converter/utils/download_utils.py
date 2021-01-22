@@ -45,10 +45,11 @@ def download_from_yaml(yaml_file: str, output_dir: str,
                 else:
                     logging.info("Using cached version of {}".format(outfile))
                     continue
-
-            req = Request(item['url'], headers={'User-Agent': 'Mozilla/5.0'})
+                
+            # Change this code to the one in the notebook
+            '''req = Request(item['url'], headers={'User-Agent': 'Mozilla/5.0'})
             with urlopen(req) as response, open(outfile, 'wb') as out_file:  # type: ignore
                     data = response.read()  # a `bytes` object
-                    out_file.write(data)
+                    out_file.write(data)'''
 
     return None
