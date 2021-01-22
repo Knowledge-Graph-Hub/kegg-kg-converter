@@ -159,12 +159,12 @@ def download_from_yaml(yaml_file: str, output_dir: str,
 
                 if url_breakdown[3] == 'conv':
                     conv_list = [
-                        ['chebi', 'cpd']
+                        ['cpd', 'chebi']
                     ]
                     
                     for c in conv_list:
                         new_url = item['url']+'/'.join(c)
-                        fn = item['local_name'].replace('placeholder',('-').join(c))
+                        fn = item['local_name'].replace('placeholder',('2').join(c))
                         if not path.exists(os.path.join(output_dir, fn)):
                             parse_response(new_url).to_csv(os.path.join(output_dir, fn), sep='\t', index=False)
                             # Uncomment below if len(conv_list) > 1

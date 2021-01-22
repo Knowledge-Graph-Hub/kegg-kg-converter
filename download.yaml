@@ -134,7 +134,7 @@
 -
   # Conversions
   url: http://rest.kegg.jp/conv/
-  local_name: conversion-placeholder.tsv
+  local_name: placeholder.tsv
 
 -
   # GET: Pathway, Reactions and Compounds
