@@ -156,7 +156,7 @@ def download_from_yaml(yaml_file: str, output_dir: str,
             data_name = '_'.join(url_breakdown[-2:])
             
             if url_breakdown[3] in ['list', 'link', 'conv']:
-
+                # CONV
                 if url_breakdown[3] == 'conv':
                     conv_list = [
                         ['cpd', 'chebi']
@@ -170,21 +170,25 @@ def download_from_yaml(yaml_file: str, output_dir: str,
                             # Uncomment below if len(conv_list) > 1
                             # print('Waiting a bit before next API call...')
                             # time.sleep(nap_time)
+                # LIST or LINK
                 else:
                     parse_response(item["url"]).to_csv(os.path.join(output_dir, item['local_name']), sep='\t', index=False)
                 
 
-                    
+            # GET        
             elif url_breakdown[3] in ['get']:
-                list_of_dbs = ['pathways', 'reactions', 'compounds']
+                list_of_dbs = ['pathways', 'reactions', 'compounds', 'ko']
 
                 for element in list_of_dbs:
                     fn = item['local_name'].replace('placeholder', element)
+                    print('Looking for '+fn+' ...')
                     if not path.exists(os.path.join(output_dir,fn)):
-                        print('Getting: '+fn)
+                        print('Not found. Getting: '+fn)
                         parse_response_get(item['url'], output_dir, element).to_csv(os.path.join(output_dir, fn), sep='\t', index=False)
                         print('Waiting a bit before next API call...')
                         time.sleep(nap_time)
+                    else:
+                        print('Found '+fn+'!')
             else:
                 print('Unrecognized URL')
 

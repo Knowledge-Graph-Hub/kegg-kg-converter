@@ -119,23 +119,33 @@
   url: http://rest.kegg.jp/list/cpd
   local_name: compounds.tsv
 -
+  # LIST : KO (KEGG Orthology)
+  url: http://rest.kegg.jp/list/ko
+  local_name: ko.tsv
+-
   # LINK : Reaction -> Pathway
   url: http://rest.kegg.jp/link/pathway/rn
   local_name: reactionPathwayLink.tsv
 -
-  # LINK : Compoubd -> Reaction
+  # LINK : Compound -> Reaction
   url: http://rest.kegg.jp/link/rn/cpd
   local_name: compoundReactionLink.tsv
 -
   # LINK : Compound -> Pathway
   url: http://rest.kegg.jp/link/pathway/cpd
   local_name: compoundPathwayLink.tsv
-
+-
+  # LINK : KO -> Pathway
+  url: http://rest.kegg.jp/link/pathway/ko
+  local_name: koPathwayLink.tsv
+-
+  # LINK : KO -> Reaction
+  url: http://rest.kegg.jp/link/rn/ko
+  local_name: koReactionLink.tsv
 -
   # Conversions
   url: http://rest.kegg.jp/conv/
   local_name: placeholder.tsv
-
 -
   # GET: Pathway, Reactions and Compounds
   url: http://rest.kegg.jp/get/

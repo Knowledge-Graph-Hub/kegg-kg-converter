@@ -6,6 +6,8 @@ from collections import defaultdict
 from kg_converter.transform_utils.transform import Transform
 from kg_converter.utils.transform_utils import parse_header, parse_line, write_node_edge_item
 
+import pandas as pd
+
 """
 Ingest data from the KEGG database
 
@@ -29,6 +31,25 @@ class KEGGTransform(Transform):
     def run(self, data_file: Optional[str] = None):
         """Method is called and performs needed transformations to process the 
         KEGG data, additional information on this data can be found in the comment 
-        at the top of this script"""
+        at the top of this script.
+
+        :param input_dir: SOurce of the downloaded data from the donwload step.
+        :return: None
+        
+        """
+
+        # Tables
+        cpd_list = 'compounds.tsv'
+        rn_list = 'reactions.tsv'
+        path_list = 'pathways.tsv'
+        cpd_path_link = 'compoundPathwayLink.tsv'
+        cpd_rn_link = 'compoundReactionLink.tsv'
+        rn_path_link = 'reactionaPathwayLink.tsv'
+        cpd2chebi = 'cpd2chebi.tsv'
+        full_cpd= 'kegg-compounds.tsv'
+        full_rn = 'kegg-reactions.tsv'
+        full_path = 'kegg-pathways.tsv'
+
+
 
         
