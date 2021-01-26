@@ -5,3 +5,5 @@ __pycache__/
 .DS_Store
 build
 .DS_Store
+dist
+kg_converter.egg-info/
