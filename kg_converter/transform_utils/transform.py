@@ -38,6 +38,21 @@ class Transform:
         self.output_edge_file = os.path.join(self.output_dir, "edges.tsv")
         self.output_json_file = os.path.join(self.output_dir, "nodes_edges.json")
         self.subset_terms_file = os.path.join(self.input_base_dir,"subset_terms.tsv")
+
+        # KEGG Tables
+        self.cpd_list = os.path.join(self.input_base_dir,'compounds.tsv')
+        self.rn_list = os.path.join(self.input_base_dir,'reactions.tsv')
+        self.path_list = os.path.join(self.input_base_dir,'pathways.tsv')
+        self.ko_list = os.path.join(self.input_base_dir,'ko.tsv')
+        self.cpd_path_link = os.path.join(self.input_base_dir,'compoundPathwayLink.tsv')
+        self.cpd_rn_link = os.path.join(self.input_base_dir,'compoundReactionLink.tsv')
+        self.rn_path_link = os.path.join(self.input_base_dir,'reactionPathwayLink.tsv')
+        self.ko_path_link = os.path.join(self.input_base_dir,'koPathwayLink.tsv')
+        self.ko_rn_link = os.path.join(self.input_base_dir,'koReactionLink.tsv')
+        self.cpd2chebi = os.path.join(self.input_base_dir,'cpd2chebi.tsv')
+        self.full_cpd= os.path.join(self.input_base_dir,'kegg-compounds.tsv')
+        self.full_rn = os.path.join(self.input_base_dir,'kegg-reactions.tsv')
+        self.full_path = os.path.join(self.input_base_dir,'kegg-pathways.tsv')
         
         os.makedirs(self.output_dir, exist_ok=True)
 

@@ -39,41 +39,34 @@ class KEGGTransform(Transform):
         
         """
 
-        # Tables
-        cpd_list = 'compounds.tsv'
-        rn_list = 'reactions.tsv'
-        path_list = 'pathways.tsv'
-        ko_list = 'ko.tsv'
-        cpd_path_link = 'compoundPathwayLink.tsv'
-        cpd_rn_link = 'compoundReactionLink.tsv'
-        rn_path_link = 'reactionPathwayLink.tsv'
-        ko_path_link = 'koPathwayLink.tsv'
-        ko_rn_link = 'koReactionLink.tsv'
-        cpd2chebi = 'cpd2chebi.tsv'
-        full_cpd= 'kegg-compounds.tsv'
-        full_rn = 'kegg-reactions.tsv'
-        full_path = 'kegg-pathways.tsv'
-
         
 
         # Pandas DF of 'list' files
-        cpd_list_df = pd.read_csv(os.path.join(self.input_base_dir,cpd_list), low_memory=False, sep='\t')
-        path_list_df = pd.read_csv(os.path.join(self.input_base_dir,path_list), low_memory=False, sep='\t')
-        rn_list_df = pd.read_csv(os.path.join(self.input_base_dir, rn_list), low_memory=False, sep='\t')
-        ko_list_df = pd.read_csv(os.path.join(self.input_base_dir, ko_list), low_memory=False, sep='\t')
+        cpd_list_df = pd.read_csv(self.cpd_list, low_memory=False, sep='\t')
+        path_list_df = pd.read_csv(self.path_list, low_memory=False, sep='\t')
+        rn_list_df = pd.read_csv(self.rn_list, low_memory=False, sep='\t')
+        ko_list_df = pd.read_csv(self.ko_list, low_memory=False, sep='\t')
 
-        # transform data, something like:
-        with open(os.path.join(self.input_base_dir,cpd_path_link), 'r') as cplf, \
-                open(os.path.join(self.input_base_dir,rn_path_link), 'r') as rplf, \
-                open(os.path.join(self.input_base_dir,cpd_rn_link), 'r') as crlf, \
+        node_dict: dict = defaultdict(int)
+        edge_dict: dict = defaultdict(int)
+
+        node_dict, edge_dict = self.post_data(self.cpd_path_link, node_dict, edge_dict)
+        #node_dict, edge_dict = self.post_data(self.cpd_rn_link, node_dict, edge_dict)
+
+        import pdb; pdb.set_trace()
+                    
+
+        return None
+
+    def post_data(self, file, seen_node, seen_edge):
+
+        with open(file, 'r') as f, \
                 open(self.output_node_file, 'w') as node, \
                 open(self.output_edge_file, 'w') as edge:
 
                 # write headers (change default node/edge headers if necessary
                 node.write("\t".join(self.node_header) + "\n")
                 edge.write("\t".join(self.edge_header) + "\n")
-                
-                header_items = parse_header(cplf.readline(), sep='\t')
                 
                 seen_node: dict = defaultdict(int)
                 seen_edge: dict = defaultdict(int)
@@ -89,40 +82,48 @@ class KEGGTransform(Transform):
                 cpd_to_rn_label = "#_ChemicalToReactionAssociaton"
                 path_to_rn_label = "#_PathToReactionAssociation"
 
-                # Compound & Pathway nodes
-                for line in cplf:
+                header_items = parse_header(f.readline(), sep='\t')
+
+                # Nodes
+                for line in f:
                     # transform line into nodes and edges
                     # node.write(this_node1)
                     # node.write(this_node2)
                     # edge.write(this_edge)
                     items_dict = parse_line(line, header_items, sep='\t')
-                    cpd_id = items_dict['cpdId']
-                    cpd_name = cpd_list_df[cpd_list_df['cpdId'] == cpd_id]['cpd'].values[0]
                     
-                    path_id = items_dict['pathwayId']
-                    path_name = path_list_df[path_list_df['pathwayId'] == path_id]['pathway'].values[0]
+                    for key in items_dict.keys():
+                        list_df = pd.DataFrame()
+                        node_type = ''
+                        if key[:-2] == 'cpd':
+                            list_df = pd.read_csv(self.cpd_list, sep='\t', low_memory=False)
+                            node_type = cpd_node_type
+                        elif key[:-2] == 'rn':
+                            list_df = pd.read_csv(self.rn_list, sep='\t', low_memory=False)
+                            node_type = rn_node_type
+                        elif key[:-2] == 'pathway':
+                            list_df = pd.read_csv(self.path_list, sep='\t', low_memory=False)
+                            node_type = path_node_type
+                        elif key[:-2] == 'ko':
+                            list_df = pd.read_csv(self.ko_list, sep='\t', low_memory=False)
+                            node_type = ko_node_type
 
-                    if cpd_id not in seen_node:
-                        write_node_edge_item(fh=node,
+                        id = items_dict[key]
+                        name = list_df[list_df[key] == id][key[:-2]].values[0]
+
+                        if id not in seen_node:
+                            write_node_edge_item(fh=node,
                                                 header=self.node_header,
-                                                data=[cpd_id,
-                                                      cpd_name,
-                                                      cpd_node_type])
-                        seen_node[cpd_id] += 1
+                                                data=[id,
+                                                      name,
+                                                      node_type])
+                        seen_node[id] += 1
+
+                        
 
 
-                    if path_id not in seen_node:
-                        write_node_edge_item(fh=node,
-                                                header=self.node_header,
-                                                data=[path_id,
-                                                        path_name,
-                                                        path_node_type])
-                        seen_node[path_id] += 1
 
-                    #import pdb; pdb.set_trace()
-
-        return None
-
+        return [seen_node, seen_edge]
 
 
 
