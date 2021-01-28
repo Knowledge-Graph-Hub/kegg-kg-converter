@@ -21,7 +21,9 @@ def parse_response(url: str)-> pd.DataFrame:
     :param url: URL of the REST API
     :return: Pandas DataFrame.
     '''
-    
+    col_1 = ''
+    col_2 = ''
+
     if url.split('/')[3] == 'list':
         col_1 = url.split('/')[4]+'Id'
         col_2 = url.split('/')[4]
@@ -30,7 +32,7 @@ def parse_response(url: str)-> pd.DataFrame:
         col_2 = url.split('/')[4]+'Id'
     elif url.split('/')[3] == 'conv':
         col_1 = url.split('/')[5]+'Id'
-        col_2 = url.split('/')[4]
+        col_2 = url.split('/')[4]+'Id'
     
     cols = [col_1, col_2]
     df = pd.DataFrame(columns=cols)

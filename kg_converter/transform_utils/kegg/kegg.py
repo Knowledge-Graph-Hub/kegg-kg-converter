@@ -42,16 +42,20 @@ class KEGGTransform(Transform):
         
 
         # Pandas DF of 'list' files
-        cpd_list_df = pd.read_csv(self.cpd_list, low_memory=False, sep='\t')
-        path_list_df = pd.read_csv(self.path_list, low_memory=False, sep='\t')
-        rn_list_df = pd.read_csv(self.rn_list, low_memory=False, sep='\t')
-        ko_list_df = pd.read_csv(self.ko_list, low_memory=False, sep='\t')
+        #cpd_list_df = pd.read_csv(self.cpd_list, low_memory=False, sep='\t')
+        #path_list_df = pd.read_csv(self.path_list, low_memory=False, sep='\t')
+        #rn_list_df = pd.read_csv(self.rn_list, low_memory=False, sep='\t')
+        #ko_list_df = pd.read_csv(self.ko_list, low_memory=False, sep='\t')
+        #cpd_to_chebi_df = pd.read_csv(self.cpd2chebi, low_memory=False, sep='\t')
 
         node_dict: dict = defaultdict(int)
         edge_dict: dict = defaultdict(int)
 
-        node_dict, edge_dict = self.post_data(self.cpd_path_link, node_dict, edge_dict)
+        #node_dict, edge_dict = self.post_data(self.cpd_path_link, node_dict, edge_dict)
         #node_dict, edge_dict = self.post_data(self.cpd_rn_link, node_dict, edge_dict)
+        #node_dict, edge_dict = self.post_data(self.rn_path_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.ko_path_link, node_dict, edge_dict)
+        #node_dict, edge_dict = self.post_data(self.ko_rn_link, node_dict, edge_dict)
                     
 
         return None
@@ -77,21 +81,22 @@ class KEGGTransform(Transform):
 
                 # Edges
                 cpd_to_path_label = 'biolink:ChemicalToPathwayAssociation'
-                cpd_to_rn_label = '#_ChemicalToReactionAssociaton'
-                path_to_rn_label = '#_PathToReactionAssociation'
-                ko_to_path_label = ''
-                ko_to_rn_label = ''
+                cpd_to_rn_label = 'biolink:actively_involved_in'
+                path_to_rn_label = 'biolink:actively_involved_in'
+                ko_to_path_label = 'biolink:actively_involved_in'
+                ko_to_rn_label = 'biolink:actively_involved_in'
                 predicate = ''
                 predicate_curie = ''
-                edge_id = ''
-                subject = ''
-                object = ''
+                
 
-                cpd_to_path_relation = 'NEED_CURIE'
-                cpd_to_rn_relation = 'NEED_CURIE'
-                path_to_rn_relation = 'NEED_CURIE'
-                ko_to_path_relation = 'NEED_CURIE'
-                ko_to_rn_relation = 'NEED_CURIE'
+                cpd_to_path_relation = 'GO:is_active_in'
+                cpd_to_rn_relation = 'GO:is_active_in'
+                rn_to_path_relation = 'GO:is_active_in'
+                ko_to_path_relation = 'GO:is_active_in'
+                ko_to_rn_relation = 'GO:is_active_in'
+
+                cpd_to_chebi_df = pd.DataFrame()
+                node_id = ''
 
                 header_items = parse_header(f.readline(), sep='\t')
 
@@ -103,7 +108,15 @@ class KEGGTransform(Transform):
                     predicate_curie = cpd_to_rn_relation
                 elif all(x in header_items for x in ['pathwayId', 'rnId']):
                     predicate = path_to_rn_label
-                    predicate_curie = path_to_rn_relation
+                    predicate_curie = rn_to_path_relation
+                elif all(x in header_items for x in ['koId', 'pathwayId']):
+                    predicate = ko_to_path_label
+                    predicate_curie = ko_to_path_relation
+                elif all(x in header_items for x in ['koId', 'rnId']):
+                    predicate = ko_to_rn_label
+                    predicate_curie = ko_to_rn_relation
+                else:
+                    print('Unexpected column names provided.')
                 
                 for line in f:
                     # transform line into nodes and edges
@@ -112,13 +125,19 @@ class KEGGTransform(Transform):
                     # edge.write(this_edge)
                     items_dict = parse_line(line, header_items, sep='\t')
                     
+                    edge_id = ''
+                    subject = ''
+                    object = ''
                     
                     for key in items_dict.keys():
                         list_df = pd.DataFrame()
                         node_type = ''
+                        need_chebi = False
                         if key[:-2] == 'cpd':
                             list_df = pd.read_csv(self.cpd_list, sep='\t', low_memory=False)
                             node_type = cpd_node_type
+                            cpd_to_chebi_df = pd.read_csv(self.cpd2chebi, low_memory=False, sep='\t')
+                            need_chebi = True
                         elif key[:-2] == 'rn':
                             list_df = pd.read_csv(self.rn_list, sep='\t', low_memory=False)
                             node_type = rn_node_type
@@ -129,16 +148,33 @@ class KEGGTransform(Transform):
                             list_df = pd.read_csv(self.ko_list, sep='\t', low_memory=False)
                             node_type = ko_node_type
 
-                        node_id = items_dict[key]
+                        # Get CHEBI equivalent if possible
+                        if need_chebi and (any(cpd_to_chebi_df[key].str.contains(items_dict[key]))):
+                            node_id = cpd_to_chebi_df[cpd_to_chebi_df[key]==items_dict[key]]['chebiId'].values[0]
+                        else:
+                            node_id = items_dict[key]
+
 
                         if edge_id == '':
                             edge_id = node_id
                             subject = node_id
                         else:
-                            edge_id += node_id
+                            edge_id += '-'+node_id
                             object = node_id
+                        
+                        #import pdb; pdb.set_trace()
 
-                        name = list_df[list_df[key] == node_id][key[:-2]].values[0]
+                        if key =='pathwayId':
+                            if 'rn' in items_dict[key]:
+                                name = list_df[list_df[key] == items_dict[key].replace('rn', 'map')][key[:-2]].values[0]
+                            elif 'ko' in items_dict[key]:
+                                name = list_df[list_df[key] == items_dict[key].replace('ko', 'map')][key[:-2]].values[0]
+                            else:
+                                name = list_df[list_df[key] == items_dict[key]][key[:-2]].values[0]
+
+                        else:
+                            name = list_df[list_df[key] == items_dict[key]][key[:-2]].values[0]
+
                         # Nodes
                         if node_id not in seen_node:
                             write_node_edge_item(fh=node,
@@ -147,6 +183,7 @@ class KEGGTransform(Transform):
                                                       name,
                                                       node_type])
                             seen_node[node_id] += 1
+                        
 
                     # Edges
                     if edge_id not in seen_edge:
