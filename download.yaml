@@ -124,24 +124,24 @@
   local_name: ko.tsv
 -
   # LINK : Reaction -> Pathway
-  url: http://rest.kegg.jp/link/pathway/rn
-  local_name: reactionPathwayLink.tsv
+  url: http://rest.kegg.jp/link/rn/pathway
+  local_name: pathwayReactionLink.tsv
 -
   # LINK : Compound -> Reaction
-  url: http://rest.kegg.jp/link/rn/cpd
-  local_name: compoundReactionLink.tsv
+  url: http://rest.kegg.jp/link/cpd/rn
+  local_name: reactionCompoundLink.tsv
 -
   # LINK : Compound -> Pathway
-  url: http://rest.kegg.jp/link/pathway/cpd
-  local_name: compoundPathwayLink.tsv
+  url: http://rest.kegg.jp/link/cpd/pathway
+  local_name: pathwayCompoundLink.tsv
 -
   # LINK : KO -> Pathway
-  url: http://rest.kegg.jp/link/pathway/ko
-  local_name: koPathwayLink.tsv
+  url: http://rest.kegg.jp/link/ko/pathway
+  local_name: pathwayKoLink.tsv
 -
   # LINK : KO -> Reaction
-  url: http://rest.kegg.jp/link/rn/ko
-  local_name: koReactionLink.tsv
+  url: http://rest.kegg.jp/link/ko/rn
+  local_name: reactionKoLink.tsv
 -
   # Conversions
   url: http://rest.kegg.jp/conv/

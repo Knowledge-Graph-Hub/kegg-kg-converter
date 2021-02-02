@@ -194,12 +194,12 @@ def download_from_yaml(yaml_file: str, output_dir: str,
             else:
                 print('Non-KEGG URL')
                 # OR regular wget download here.
-                '''
+                
                 req = Request(item['url'], headers={'User-Agent': 'Mozilla/5.0'})
                 with urlopen(req) as response, open(outfile, 'wb') as out_file:  # type: ignore
                         data = response.read()  # a `bytes` object
                         out_file.write(data)
-                '''
+                
 
     return None
 

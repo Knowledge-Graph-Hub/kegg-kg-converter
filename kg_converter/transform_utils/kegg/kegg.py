@@ -51,11 +51,11 @@ class KEGGTransform(Transform):
         node_dict: dict = defaultdict(int)
         edge_dict: dict = defaultdict(int)
 
-        #node_dict, edge_dict = self.post_data(self.cpd_path_link, node_dict, edge_dict)
-        #node_dict, edge_dict = self.post_data(self.cpd_rn_link, node_dict, edge_dict)
-        #node_dict, edge_dict = self.post_data(self.rn_path_link, node_dict, edge_dict)
-        node_dict, edge_dict = self.post_data(self.ko_path_link, node_dict, edge_dict)
-        #node_dict, edge_dict = self.post_data(self.ko_rn_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.path_cpd_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.rn_cpd_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.path_rn_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.path_ko_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.rn_ko_link, node_dict, edge_dict)
                     
 
         return None
@@ -80,20 +80,20 @@ class KEGGTransform(Transform):
                 ko_node_type = 'biolink:GeneFamily'
 
                 # Edges
-                cpd_to_path_label = 'biolink:ChemicalToPathwayAssociation'
-                cpd_to_rn_label = 'biolink:actively_involved_in'
-                path_to_rn_label = 'biolink:actively_involved_in'
-                ko_to_path_label = 'biolink:actively_involved_in'
-                ko_to_rn_label = 'biolink:actively_involved_in'
+                path_to_cpd_label = 'biolink:has_participant'
+                rn_to_cpd_label = 'biolink:has_participant'
+                path_to_rn_label = 'biolink:has_participant'
+                path_to_ko_label = 'biolink:has_participant'
+                rn_to_ko_label = 'biolink:has_participant'
                 predicate = ''
                 predicate_curie = ''
                 
 
-                cpd_to_path_relation = 'GO:is_active_in'
-                cpd_to_rn_relation = 'GO:is_active_in'
-                rn_to_path_relation = 'GO:is_active_in'
-                ko_to_path_relation = 'GO:is_active_in'
-                ko_to_rn_relation = 'GO:is_active_in'
+                path_to_cpd_relation = 'RO:0000057'
+                rn_to_cpd_relation = 'RO:0000057'
+                path_to_rn_relation = 'RO:0000057'
+                path_to_ko_relation = 'RO:0000057'
+                rn_to_ko_relation = 'RO:0000057'
 
                 cpd_to_chebi_df = pd.DataFrame()
                 node_id = ''
@@ -101,20 +101,20 @@ class KEGGTransform(Transform):
                 header_items = parse_header(f.readline(), sep='\t')
 
                 if all(x in header_items for x in ['cpdId', 'pathwayId']):
-                    predicate = cpd_to_path_label
-                    predicate_curie = cpd_to_path_relation
+                    predicate = path_to_cpd_label
+                    predicate_curie = path_to_cpd_relation
                 elif all(x in header_items for x in ['cpdId', 'rnId']):
-                    predicate = cpd_to_rn_label
-                    predicate_curie = cpd_to_rn_relation
+                    predicate = rn_to_cpd_label
+                    predicate_curie = rn_to_cpd_relation
                 elif all(x in header_items for x in ['pathwayId', 'rnId']):
                     predicate = path_to_rn_label
-                    predicate_curie = rn_to_path_relation
+                    predicate_curie = path_to_rn_relation
                 elif all(x in header_items for x in ['koId', 'pathwayId']):
-                    predicate = ko_to_path_label
-                    predicate_curie = ko_to_path_relation
+                    predicate = path_to_ko_label
+                    predicate_curie = path_to_ko_relation
                 elif all(x in header_items for x in ['koId', 'rnId']):
-                    predicate = ko_to_rn_label
-                    predicate_curie = ko_to_rn_relation
+                    predicate = rn_to_ko_label
+                    predicate_curie = rn_to_ko_relation
                 else:
                     print('Unexpected column names provided.')
                 
