@@ -24,12 +24,11 @@ The code for these are found in the [utils](kg_converter/utils) folder.
 
 Thes examples have download links and transform codes from other projects.
 
-- Drug Central: Sampled from [kg-covid-19](https://github.com/Knowledge-Graph-Hub/kg-covid-19). Code located [here](kg_converter/transform_utils/drug_central)
+
 - Ontology: Sampled from [kg-covid-19](https://github.com/Knowledge-Graph-Hub/kg-covid-19). Code located [here](kg_converter/transform_utils/ontology)
-- Traits: Sampled from [kg-microbe](https://github.com/Knowledge-Graph-Hub/kg-microbe). Code located [here](kg_converter/transform_utils/traits)
 - Example Transform: Boilerplate code for transforms. Code located [here](kg_converter/example_transform).
 
-The [merge.yaml](merge.yaml) shows merging of the various KGs. In this example we have ENVO, CHEBI, NCBITaxon and the Traits KGs merged.
+The [merge.yaml](merge.yaml) shows merging of the various KGs.
 
 **Implementation**
 

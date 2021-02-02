@@ -3,21 +3,15 @@
 import logging
 from typing import List
 
-#from kg_converter.transform_utils.drug_central.drug_central import DrugCentralTransform
+
 from kg_converter.transform_utils.ontology import OntologyTransform
 from kg_converter.transform_utils.ontology.ontology_transform import ONTOLOGIES
 from kg_converter.transform_utils.kegg import KEGGTransform
 
 
 DATA_SOURCES = {
-    #'DrugCentralTransform': DrugCentralTransform,
-    #'GoTransform': OntologyTransform,
-    #'HpTransform': OntologyTransform,
-    #'NCBITransform': OntologyTransform,
     'KEGGTransform': KEGGTransform,
-    'ChebiTransform': OntologyTransform,
-    #'EnvoTransform' : OntologyTransform,
-    #'TraitsTransform': TraitsTransform
+    #'ChebiTransform': OntologyTransform
 }
 
 
