@@ -51,20 +51,34 @@ class KEGGTransform(Transform):
         node_dict: dict = defaultdict(int)
         edge_dict: dict = defaultdict(int)
 
-        node_dict, edge_dict = self.post_data(self.path_cpd_link, node_dict, edge_dict)
-        node_dict, edge_dict = self.post_data(self.rn_cpd_link, node_dict, edge_dict)
-        node_dict, edge_dict = self.post_data(self.path_rn_link, node_dict, edge_dict)
-        node_dict, edge_dict = self.post_data(self.path_ko_link, node_dict, edge_dict)
-        node_dict, edge_dict = self.post_data(self.rn_ko_link, node_dict, edge_dict)
+        node_dict, edge_dict = self.post_data(self.path_cpd_link, node_dict, edge_dict, 'w')
+        node_dict, edge_dict = self.post_data(self.rn_cpd_link, node_dict, edge_dict, 'a')
+        node_dict, edge_dict = self.post_data(self.path_rn_link, node_dict, edge_dict, 'a')
+        node_dict, edge_dict = self.post_data(self.path_ko_link, node_dict, edge_dict, 'a')
+        node_dict, edge_dict = self.post_data(self.rn_ko_link, node_dict, edge_dict, 'a')
                     
 
         return None
 
-    def post_data(self, file, seen_node, seen_edge):
+    def post_data(self, file, seen_node, seen_edge, mode):
+        '''
+        This function transforms the following KEGG data into nodes and edges:
+            -   Pathway <-> Compound
+            -   Reaction <-> Compound
+            -   Pathways <-> Reaction
+            -   Pathway <-> KEGG Orthology
+            -   Reaction <-> KEGG Orthology
+
+        :param file: The link file used as input.
+        :param seen_node: Dictionary of all nodes recorded to avoid duplication.
+        :param seen_edge: Dictionary of all edges recorded to avoid duplication.
+        :param mode: Two options ['write' and 'append'] to avoid overwriting of nodes and edges tsv files.
+        :return: seen_node and seen_edge such that the nodes and edges are unique throughout the process.
+        '''
 
         with open(file, 'r') as f, \
-                open(self.output_node_file, 'w') as node, \
-                open(self.output_edge_file, 'w') as edge:
+                open(self.output_node_file, mode) as node, \
+                open(self.output_edge_file, mode) as edge:
 
                 # write headers (change default node/edge headers if necessary
                 node.write('\t'.join(self.node_header) + '\n')
