@@ -1,0 +1,39 @@
+edge_stats:
+  count_by_predicates:
+    biolink:has_participant:
+      count: 196094
+    unknown:
+      count: 0
+  count_by_spo:
+    biolink:MolecularActivity-biolink:has_participant-biolink:ChemicalSubstance:
+      count: 48352
+    biolink:MolecularActivity-biolink:has_participant-biolink:GeneFamily:
+      count: 11046
+    biolink:Pathway-biolink:has_participant-biolink:ChemicalSubstance:
+      count: 17372
+    biolink:Pathway-biolink:has_participant-biolink:GeneFamily:
+      count: 84414
+    biolink:Pathway-biolink:has_participant-biolink:MolecularActivity:
+      count: 34910
+  predicates:
+  - biolink:has_participant
+  total_edges: 196094
+graph_name: Merged Graph
+node_stats:
+  count_by_category:
+    biolink:ChemicalSubstance:
+      count: 9432
+    biolink:GeneFamily:
+      count: 13125
+    biolink:MolecularActivity:
+      count: 11456
+    biolink:Pathway:
+      count: 1136
+    unknown:
+      count: 0
+  node_categories:
+  - biolink:ChemicalSubstance
+  - biolink:GeneFamily
+  - biolink:MolecularActivity
+  - biolink:Pathway
+  total_nodes: 35149
