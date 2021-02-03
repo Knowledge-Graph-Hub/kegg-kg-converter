@@ -94,6 +94,12 @@ class KEGGTransform(Transform):
                 rn_node_type = 'biolink:MolecularActivity'
                 ko_node_type = 'biolink:GeneFamily'
 
+                # Node Prefixes
+                cpd_pref = 'KEGG.COMPOUND:'
+                rn_pref = 'KEGG.REACTION:'
+                path_pref = 'KEGG.PATHWAY:'
+                ko_pref = 'KEGG.ORTHOLOGY:'
+
                 # Edges
                 path_to_cpd_label = 'biolink:has_participant'
                 rn_to_cpd_label = 'biolink:has_participant'
@@ -112,6 +118,7 @@ class KEGGTransform(Transform):
 
                 #cpd_to_chebi_df = pd.DataFrame()
                 node_id = ''
+                node_pref = ''
 
                 header_items = parse_header(f.readline(), sep='\t')
 
@@ -151,17 +158,21 @@ class KEGGTransform(Transform):
                         if key[:-2] == 'cpd':
                             list_df = pd.read_csv(self.cpd_list, sep='\t', low_memory=False)
                             node_type = cpd_node_type
+                            node_pref = cpd_pref
                             #cpd_to_chebi_df = pd.read_csv(self.cpd2chebi, low_memory=False, sep='\t')
                             need_chebi = True
                         elif key[:-2] == 'rn':
                             list_df = pd.read_csv(self.rn_list, sep='\t', low_memory=False)
                             node_type = rn_node_type
+                            node_pref = rn_pref
                         elif key[:-2] == 'pathway':
                             list_df = pd.read_csv(self.path_list, sep='\t', low_memory=False)
                             node_type = path_node_type
+                            node_pref = path_pref
                         elif key[:-2] == 'ko':
                             list_df = pd.read_csv(self.ko_list, sep='\t', low_memory=False)
                             node_type = ko_node_type
+                            node_pref = ko_pref
 
                         # Get CHEBI equivalent if possible
                         #if need_chebi and (any(cpd_to_chebi_df[key].str.contains(items_dict[key]))):
@@ -172,10 +183,10 @@ class KEGGTransform(Transform):
 
                         if edge_id == '':
                             edge_id = node_id
-                            subject = node_id
+                            subject = node_pref+node_id
                         else:
                             edge_id += '-'+node_id
-                            object = node_id
+                            object = node_pref+node_id
                         
                         #import pdb; pdb.set_trace()
 
@@ -194,7 +205,7 @@ class KEGGTransform(Transform):
                         if node_id not in seen_node:
                             write_node_edge_item(fh=node,
                                                 header=self.node_header,
-                                                data=[node_id,
+                                                data=[node_pref+node_id,
                                                       name,
                                                       node_type])
                             seen_node[node_id] += 1
