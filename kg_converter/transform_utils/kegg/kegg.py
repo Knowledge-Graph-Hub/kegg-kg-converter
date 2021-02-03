@@ -81,8 +81,9 @@ class KEGGTransform(Transform):
                 open(self.output_edge_file, mode) as edge:
 
                 # write headers (change default node/edge headers if necessary
-                node.write('\t'.join(self.node_header) + '\n')
-                edge.write('\t'.join(self.edge_header) + '\n')
+                if mode == 'w':
+                    node.write('\t'.join(self.node_header) + '\n')
+                    edge.write('\t'.join(self.edge_header) + '\n')
                 
                 seen_node: dict = defaultdict(int)
                 seen_edge: dict = defaultdict(int)
