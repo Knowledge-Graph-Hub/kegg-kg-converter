@@ -109,7 +109,7 @@ class KEGGTransform(Transform):
                 path_to_ko_relation = 'RO:0000057'
                 rn_to_ko_relation = 'RO:0000057'
 
-                cpd_to_chebi_df = pd.DataFrame()
+                #cpd_to_chebi_df = pd.DataFrame()
                 node_id = ''
 
                 header_items = parse_header(f.readline(), sep='\t')
@@ -146,11 +146,11 @@ class KEGGTransform(Transform):
                     for key in items_dict.keys():
                         list_df = pd.DataFrame()
                         node_type = ''
-                        need_chebi = False
+                        #need_chebi = False
                         if key[:-2] == 'cpd':
                             list_df = pd.read_csv(self.cpd_list, sep='\t', low_memory=False)
                             node_type = cpd_node_type
-                            cpd_to_chebi_df = pd.read_csv(self.cpd2chebi, low_memory=False, sep='\t')
+                            #cpd_to_chebi_df = pd.read_csv(self.cpd2chebi, low_memory=False, sep='\t')
                             need_chebi = True
                         elif key[:-2] == 'rn':
                             list_df = pd.read_csv(self.rn_list, sep='\t', low_memory=False)
@@ -163,10 +163,10 @@ class KEGGTransform(Transform):
                             node_type = ko_node_type
 
                         # Get CHEBI equivalent if possible
-                        if need_chebi and (any(cpd_to_chebi_df[key].str.contains(items_dict[key]))):
-                            node_id = cpd_to_chebi_df[cpd_to_chebi_df[key]==items_dict[key]]['chebiId'].values[0]
-                        else:
-                            node_id = items_dict[key]
+                        #if need_chebi and (any(cpd_to_chebi_df[key].str.contains(items_dict[key]))):
+                            #node_id = cpd_to_chebi_df[cpd_to_chebi_df[key]==items_dict[key]]['chebiId'].values[0]
+                        #else:
+                        node_id = items_dict[key]
 
 
                         if edge_id == '':
