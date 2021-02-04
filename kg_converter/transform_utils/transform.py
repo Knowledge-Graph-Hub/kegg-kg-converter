@@ -57,6 +57,7 @@ class Transform:
         self.full_cpd= os.path.join(self.input_base_dir,'kegg-compounds.tsv')
         self.full_rn = os.path.join(self.input_base_dir,'kegg-reactions.tsv')
         self.full_path = os.path.join(self.input_base_dir,'kegg-pathways.tsv')
+        self.full_ko = os.path.join(self.input_base_dir,'kegg-ko.tsv')
         
         os.makedirs(self.output_dir, exist_ok=True)
 
