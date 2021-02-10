@@ -1,24 +1,21 @@
 import os
-import tempfile
 import unittest
 import pandas as pd
-from kg_converter.transform_utils.drug_central import DrugCentralTransform
-from kg_converter.transform_utils.drug_central.drug_central import \
-    parse_drug_central_line
+from kg_converter.transform_utils.kegg import KEGGTransform
+from kg_converter.transform_utils.kegg.kegg import parse_line
 from kg_converter.utils.transform_utils import parse_header
 from parameterized import parameterized
 
 
-class TestDrugCentral(unittest.TestCase):
+class TestKEGG(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.dti_fh = open(
-            'tests/resources/drug_central/drug.target.interaction_SNIPPET.tsv', 'rt')
-        self.input_dir = \
-            'tests/resources/drug_central/'
-        self.output_dir = tempfile.gettempdir()
-        self.dc_output_dir = os.path.join(self.output_dir, "drug_central")
-        self.drug_central = DrugCentralTransform(input_dir=self.input_dir,
+        self.resources = 'tests/resources/'
+        self.input_dir = os.path.join(self.resources,'kegg/input/')
+        self.output_dir = os.path.join(self.resources,'kegg/output/')
+        self.kegg_fh = open(os.path.join(self.input_dir, 'rt'))
+        self.kegg_output_dir = os.path.join(self.output_dir, "kegg/")
+        self.kegg = KEGGTransform(input_dir=self.input_dir,
                                                  output_dir=self.output_dir)
 
     @parameterized.expand([
@@ -41,10 +38,10 @@ class TestDrugCentral(unittest.TestCase):
      ('ACTION_TYPE', 'BLOCKER'),
      ('TDL', 'Tclin'),
      ('ORGANISM', 'Homo sapiens')])
-    def test_parse_drug_central_line(self, key, value):
+    def test_parse_kegg_line(self, key, value):
         header = parse_header(self.dti_fh.readline())
         line = self.dti_fh.readline()
-        parsed = parse_drug_central_line(line, header)
+        parsed = parse_line(line, header)
         self.assertTrue(key in parsed)
         self.assertEqual(value, parsed[key])
 
