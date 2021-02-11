@@ -32,6 +32,10 @@ test_deps = [
     'coveralls',
     'validate_version_code',
     'codacy-coverage',
+    'parameterized',
+    'sphinx',
+    'sphinx_rtd_theme',
+    'recommonmark',
     'parameterized'
 ]
 

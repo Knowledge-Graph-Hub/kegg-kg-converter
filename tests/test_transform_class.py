@@ -4,17 +4,11 @@ from unittest import TestCase
 from parameterized import parameterized
 from kg_converter.transform import DATA_SOURCES
 from kg_converter.transform_utils.transform import Transform
-from kg_converter.transform_utils.drug_central.drug_central import DrugCentralTransform
-from kg_converter.transform_utils.intact.intact import IntAct
+from kg_converter.transform_utils.kegg.kegg import KEGGTransform
 from kg_converter.transform_utils.ontology import OntologyTransform
 from kg_converter.transform_utils.ontology.ontology_transform import ONTOLOGIES
-from kg_converter.transform_utils.\
-    sars_cov_2_gene_annot.sars_cov_2_gene_annot import SARSCoV2GeneAnnot
-from kg_converter.transform_utils.pharmgkb import PharmGKB
-from kg_converter.transform_utils.scibite_cord import ScibiteCordTransform
-from kg_converter.transform_utils.string_ppi import StringTransform
-from kg_converter.transform_utils.ttd.ttd import TTDTransform
-from kg_converter.transform_utils.zhou_host_proteins.zhou_transform import ZhouTransform
+
+
 
 
 class TestTransform(TestCase):
