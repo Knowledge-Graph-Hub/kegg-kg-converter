@@ -27,7 +27,7 @@ class KEGGTransform(Transform):
         source_name = 'kegg'
         super().__init__(source_name, input_dir, output_dir, nlp)  # set some variables
 
-        self.node_header = ['id', 'name', 'category', 'exact_match', 'description' ]
+        self.node_header = ['id', 'name', 'category', 'exact_match', 'close_match', 'description' ]
         self.edge_header = ['subject', 'predicate', 'object', 'relation']
         self.nlp = nlp
     
@@ -54,9 +54,35 @@ class KEGGTransform(Transform):
         
         path_df = self.prune_columns(pd.read_csv(self.full_path, low_memory=False, sep='\t', usecols=['ENTRY', 'NAME']), 'path')
         rn_df = self.prune_columns(pd.read_csv(self.full_rn, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION', 'EQUATION']), 'rn')
-        ko_df = self.prune_columns(pd.read_csv(self.full_ko, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION']), 'ko')
+        ko_df = self.prune_columns(pd.read_csv(self.full_ko, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION', 'DBLINKS']), 'ko')
         
-        
+        ## **********************************************************************
+        # Establishing 1-to-1 relation between KO and XRefs (['DBLINKS'] column)
+        ##***********************************************************************
+
+        # Explode DBLINKS in ko_df to separate rows
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).split('|'))
+        ko_df = ko_df.explode('DBLINKS')
+
+        #ko_df['ID'] = ko_df['ID'].apply(lambda row : 'ko:'+str(row))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).replace('RN: ', 'KEGG.REACTION:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('COG: ', 'COG:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('GO: ', 'go:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('TC: ', 'tcdb:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('CAZy: ', 'cazy:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('UniProt: ', 'uniprot:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row: str(row).split(' '))
+        # Add prefixes to all DBLINKS
+        ko_df['DBLINKS'] = ko_df['DBLINKS'] \
+                            .apply(lambda row: [str(row[0])]+[str(row[0])
+                                .split(':')[0] + ':'+ x \
+                                    for x in row \
+                                        if not str(x).startswith(str(row[0]).split(':')[0]+ ':')])
+
+        ko_df['DBLINKS'] = ['|'.join(map(str, l)) for l in ko_df['DBLINKS']]
+        # Roll up to consolidated rows
+        ko_df = ko_df.groupby(['ID', 'DESCRIPTION'], as_index=False).agg({'DBLINKS': lambda x: '|'.join(x)})
+        ##########################################################################
 
         node_dict: dict = defaultdict(int)
         edge_dict: dict = defaultdict(int)
@@ -136,6 +162,7 @@ class KEGGTransform(Transform):
                 node_id = ''
                 node_pref = ''
                 synonyms = ''
+                xrefs = ''
                 
 
                 header_items = parse_header(f.readline(), sep='\t')
@@ -227,9 +254,14 @@ class KEGGTransform(Transform):
 
                         else:
                             names = list_df[list_df[key] == items_dict[key]][key[:-2]].values[0]
+                            if key == 'koId':
+                                
+                                xrefs = desc_dict[key[:-2]][desc_dict[key[:-2]]['ID'] == core_id]['DBLINKS'].values[0]
+                                
                         
                         name = names.split(';')[0]
                         synonyms = ' | '.join(names.split(';')[1:]).strip()
+                        
                         
 
                         # Nodes
@@ -240,6 +272,7 @@ class KEGGTransform(Transform):
                                                       name,
                                                       node_type,
                                                       synonyms,
+                                                      xrefs,
                                                       description])
                             seen_node[node_id] += 1
                         
@@ -267,6 +300,7 @@ class KEGGTransform(Transform):
             new_df['DESCRIPTION'] = df['DEFINITION'] + ' | EQUATION: ' + df['EQUATION']
         elif type == 'ko':
             new_df['DESCRIPTION'] = df['DEFINITION']
+            new_df['DBLINKS'] = df['DBLINKS']
         else:
             print('Unknown type of data')
 
