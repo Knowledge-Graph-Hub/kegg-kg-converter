@@ -52,8 +52,8 @@ class KEGGTransform(Transform):
 
         # Pandas DF of 'kegg-*.tsv' files
         
-        path_df = self.prune_columns(pd.read_csv(self.full_path, low_memory=False, sep='\t', usecols=['ENTRY', 'NAME']), 'path')
-        rn_df = self.prune_columns(pd.read_csv(self.full_rn, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION', 'EQUATION']), 'rn')
+        path_df = self.prune_columns(pd.read_csv(self.full_path, low_memory=False, sep='\t', usecols=['ENTRY', 'NAME', 'DBLINKS']), 'path')
+        rn_df = self.prune_columns(pd.read_csv(self.full_rn, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION', 'EQUATION', 'DBLINKS']), 'rn')
         ko_df = self.prune_columns(pd.read_csv(self.full_ko, low_memory=False, sep='\t', usecols=['ENTRY', 'DEFINITION', 'DBLINKS']), 'ko')
         
         ## **********************************************************************
@@ -254,10 +254,11 @@ class KEGGTransform(Transform):
 
                         else:
                             names = list_df[list_df[key] == items_dict[key]][key[:-2]].values[0]
-                            if key == 'koId':
-                                
-                                xrefs = desc_dict[key[:-2]][desc_dict[key[:-2]]['ID'] == core_id]['DBLINKS'].values[0]
-                                
+                        
+                        if key != 'cpdId':
+                            db_link = desc_dict[key[:-2]][desc_dict[key[:-2]]['ID'] == core_id]['DBLINKS'].values
+                            if len(db_link) > 0:
+                                xrefs = db_link[0]
                         
                         name = names.split(';')[0]
                         synonyms = ' | '.join(names.split(';')[1:]).strip()
@@ -291,16 +292,16 @@ class KEGGTransform(Transform):
 
 
     def prune_columns(self, df:pd.DataFrame, type:str)->pd.DataFrame:
-        column_names = ['ID', 'DESCRIPTION']
+        column_names = ['ID', 'DESCRIPTION', 'DBLINKS']
         new_df = pd.DataFrame(columns=column_names)
         new_df['ID'] = df['ENTRY'].str.split(' ').str[0]
+        new_df['DBLINKS'] = df['DBLINKS']
         if type == 'path':
             new_df['DESCRIPTION'] = df['NAME'].str.split('DESCRIPTION').str[1]
         elif type == 'rn':
             new_df['DESCRIPTION'] = df['DEFINITION'] + ' | EQUATION: ' + df['EQUATION']
         elif type == 'ko':
             new_df['DESCRIPTION'] = df['DEFINITION']
-            new_df['DBLINKS'] = df['DBLINKS']
         else:
             print('Unknown type of data')
 
