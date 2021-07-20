@@ -67,7 +67,7 @@ class KEGGTransform(Transform):
         #ko_df['ID'] = ko_df['ID'].apply(lambda row : 'ko:'+str(row))
         ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).replace('RN: ', 'KEGG.REACTION:'))
         ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('COG: ', 'COG:'))
-        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('GO: ', 'go:'))
+        ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('GO: ', 'GO:'))
         ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('TC: ', 'tcdb:'))
         ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('CAZy: ', 'cazy:'))
         ko_df['DBLINKS'] = ko_df['DBLINKS'].apply(lambda row : str(row).strip().replace('UniProt: ', 'uniprot:'))
